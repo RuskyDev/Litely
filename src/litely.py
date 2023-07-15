@@ -32,8 +32,13 @@ class Litely:
         url = f"https://github.com/{repo}/raw/{latest_version}/update.bat"
         response = requests.get(url)
         if response.status_code == 200:
-            with open("temp/update.bat", "wb") as file:
-                file.write(response.content)
-            print(f"{Fore.WHITE}[{Fore.YELLOW}Litely{Fore.WHITE}] Update downloaded successfully.")
+            try:
+                os.makedirs("temp", exist_ok=True)
+                with open("temp/update.bat", "wb") as file:
+                    file.write(response.content)
+                print(f"{Fore.WHITE}[{Fore.YELLOW}Litely{Fore.WHITE}] Update downloaded successfully.")
+            except OSError as e:
+                print(f"{Fore.WHITE}[{Fore.YELLOW}Litely{Fore.WHITE}] Failed to create/update the 'temp' directory.")
+                print(f"{Fore.RED}[ERROR]: {e}")
         else:
             print(f"{Fore.WHITE}[{Fore.YELLOW}Litely{Fore.WHITE}] Failed to download the update.")
